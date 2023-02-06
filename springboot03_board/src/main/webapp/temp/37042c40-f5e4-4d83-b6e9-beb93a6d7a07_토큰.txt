@@ -1,0 +1,8 @@
+만약 url오류가 나오면 새토큰 생성후 적용
+
+jasen8651
+
+
+* 푸시가 안될떼 깃허브 토큰 새로 발급 *
+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
+
