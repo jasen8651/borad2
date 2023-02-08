@@ -106,7 +106,7 @@ public class BoardController {
 	public String writeProMethod( BoardDTO dto,  PageDTO pv, HttpServletRequest request) throws IllegalStateException, IOException  {
 		MultipartFile file = dto.getFilename();
 		if (file!=null && !file.isEmpty()) {
-			UUID random = saveCopyFile(file, request);
+			UUID random = saveCopyFile(file);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
 			file.transferTo(new File(random+"_"+file.getOriginalFilename()));
 		}
@@ -127,21 +127,22 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/board/update/{num}", method=RequestMethod.GET)
-	public BoardDTO updateMethod(int num) {
+	public BoardDTO updateMethod(@PathVariable("num") int num) {
 		return service.updateSelectProcess(num);
 	}//end updateMethod()
 	
 	@RequestMapping(value="/board/update", method=RequestMethod.PUT)
-	   public void updateProMethod(@RequestBody BoardDTO dto,  HttpServletRequest request) {
+	   public void updateProMethod( BoardDTO dto,  HttpServletRequest request) throws IllegalStateException, IOException {
 	      System.out.printf("num: %d,writer:%s\n",dto.getNum(),dto.getWriter());
 	      MultipartFile file = dto.getFilename();
 	      if(file !=null && !file.isEmpty()) {
-	         UUID random = saveCopyFile(file, request);
+	         UUID random = saveCopyFile(file);
 	         dto.setUpload(random + "_" + file.getOriginalFilename());
+	         file.transferTo(new File(random+"_"+file.getOriginalFilename()));
 	      }
 	      
-	      service.updateProcess(dto, urlPath(request));
-	   
+	      //service.updateProcess(dto, urlPath(request));
+	      service.updateProcess(dto, filePath);
 	   }//end updateProMethod
 	
 	
@@ -157,18 +158,17 @@ public class BoardController {
 	
 	
 
-	private UUID saveCopyFile(MultipartFile file, HttpServletRequest request) {
+	private UUID saveCopyFile(MultipartFile file) {
 		String fileName = file.getOriginalFilename();
 
 		// 중복파일명을 처리하기 위해 난수 발생
 		UUID random = UUID.randomUUID();
 
-		File fe = new File(urlPath(request));
-		if (!fe.exists()) {
-			fe.mkdir();
-		}
-
-		File ff = new File(urlPath(request), random + "_" + fileName);
+		File fe = new File(filePath);
+		
+		  if (!fe.exists()) { fe.mkdir(); }
+		 
+		File ff = new File(filePath, random + "_" + fileName);
 
 		try {
 			FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(ff));
