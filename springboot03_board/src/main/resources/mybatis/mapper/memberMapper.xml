@@ -6,7 +6,7 @@
    <!-- 회원가입 -->
    <insert id="saveUser" parameterType="User">
       INSERT INTO tb_user(id, username, password ,email,authRole,createDate)
-      VALUES(tb_user_id_seq.nextval,#{username, jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{authRole,jdbcType=VARCHAR},sysdate)
+      VALUES(td_user_id_seq.nextval,#{username, jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{authRole,jdbcType=VARCHAR},sysdate)
    </insert>
 
 

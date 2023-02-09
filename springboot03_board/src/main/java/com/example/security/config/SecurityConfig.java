@@ -14,8 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.login.repository.UserRepository;
-import com.example.secuity.config.CorsConfig;
 import com.example.security.jwt.JwtAuthenticationFilter;
+import com.example.security.jwt.JwtAuthorizationFilter;
+import com.example.security.service.CorsConfig;
 
 
 //[1] POSTMAN에서 테스트
@@ -78,9 +79,10 @@ public class SecurityConfig {
 			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 			  http.addFilter(corsConfig.corsFilter())  // @CrossOrigin(인증 X), Security Filter에 등록 인증(O)
 			   
-  			.addFilter(new JwtAuthenticationFilter(authenticationManager))
-			    .addFilter(new JwtAuthorizationFilter(authenticationManager, userReposiroty));
-			    
+				
+				 .addFilter(new JwtAuthenticationFilter(authenticationManager))
+				 .addFilter(new JwtAuthorizationFilter(authenticationManager, userReposiroty));
+				  
 		}
 	}
 }

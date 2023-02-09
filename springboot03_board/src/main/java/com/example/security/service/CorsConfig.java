@@ -1,4 +1,4 @@
-package com.example.secuity.config;
+package com.example.security.service;
 
 
 import org.springframework.context.annotation.Bean;
@@ -27,8 +27,9 @@ public class CorsConfig {
 		config.addAllowedHeader("*");
 		//모든 post, get, put, delete등 모든 메소드에 응답을 허용한다.
 		config.addAllowedMethod("*");
-      
+		//프런트엔드에 노출하도록 허용
 		config.addExposedHeader("Authorization");
+		//config.addExposedHeader("refeeshToken");
 		source.registerCorsConfiguration("/**", config);		
 		return new CorsFilter(source);
 	}
